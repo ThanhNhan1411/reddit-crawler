@@ -15,8 +15,10 @@ services:
       - POSTGRES_NON_ROOT_USER=postgres
       - POSTGRES_NON_ROOT_PASSWORD=postgres
     volumes:
-      - db_storage:/var/lib/postgresql/data
+      - ./db_storage:/var/lib/postgresql/data
       - ./init-data.sh:/docker-entrypoint-initdb.d/init-data.sh
+    # ports:
+    #   - 5433:5432
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -h localhost -U postgres -d postgres']
       interval: 5s
@@ -35,13 +37,13 @@ services:
       - DB_POSTGRESDB_PASSWORD=postgres
     dns:
       - 8.8.8.8
-      - 8.8.4.4
+      - 1.1.1.1
     ports:
       - 5678:5678
     links:
       - postgres
     volumes:
-      - n8n_storage:/home/node/.n8n
+      - ./n8n_storage:/home/node/.n8n
     depends_on:
       postgres:
         condition: service_healthy

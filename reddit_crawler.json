@@ -1,0 +1,815 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 7
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1380,
+        -120
+      ],
+      "id": "bb633fd0-37ca-4885-8082-ca35c7feda2e",
+      "name": "Schedule Trigger1"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "subreddit": "smallbusiness",
+        "keyword": "Automation",
+        "limit": 5,
+        "additionalFields": {
+          "sort": "new"
+        }
+      },
+      "type": "n8n-nodes-base.reddit",
+      "typeVersion": 1,
+      "position": [
+        -1160,
+        -120
+      ],
+      "id": "d376890c-d955-4ad5-8af7-b19bad251f95",
+      "name": "r/smallbusiness/automation",
+      "credentials": {
+        "redditOAuth2Api": {
+          "id": "vwL67rkqYwd39TwB",
+          "name": "Reddit account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "subreddit": "smallbusiness",
+        "keyword": "AI Automation",
+        "limit": 5,
+        "additionalFields": {
+          "sort": "new"
+        }
+      },
+      "type": "n8n-nodes-base.reddit",
+      "typeVersion": 1,
+      "position": [
+        -1160,
+        -320
+      ],
+      "id": "a4512841-26ad-40de-88aa-4f8b50f40fe9",
+      "name": "r/smallbusiness/AI Automation",
+      "credentials": {
+        "redditOAuth2Api": {
+          "id": "vwL67rkqYwd39TwB",
+          "name": "Reddit account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "subreddit": "n8n",
+        "limit": 10,
+        "filters": {
+          "category": "hot"
+        }
+      },
+      "type": "n8n-nodes-base.reddit",
+      "typeVersion": 1,
+      "position": [
+        -1160,
+        100
+      ],
+      "id": "548d7aee-4021-478e-ad21-bf8d51d1d2e2",
+      "name": "r/n8n",
+      "credentials": {
+        "redditOAuth2Api": {
+          "id": "vwL67rkqYwd39TwB",
+          "name": "Reddit account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        -960,
+        -120
+      ],
+      "id": "7657998c-45c8-4313-95a7-eaf1f3beefdb",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"summary\": \"This is an example summary\",\n\t\"relevancy_score\": 0.75,\n    \"detail_score\": 0.90\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        -80,
+        -440
+      ],
+      "id": "d40996b5-bb95-4bf2-aa82-50d3fe2e246d",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"summary\": \"This is an example summary\",\n\t\"relevancy_score\": 0.75,\n    \"detail_score\": 0.90\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        -80,
+        -140
+      ],
+      "id": "589957f7-026a-4b7c-9b58-ffec3b179e9d",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        360,
+        -300
+      ],
+      "id": "6ffff7d5-ee33-4f8a-8e4f-abc5b40221ea",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"summary\": \"This is an example summary\",\n\t\"relevancy_score\": 0.85\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        -80,
+        200
+      ],
+      "id": "d75e0fa6-3f08-4c28-83bc-53889edb9cf1",
+      "name": "Structured Output Parser2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9855d661-58cd-4485-b2d8-3a25b9eb0ff6",
+              "name": "Type",
+              "value": "System",
+              "type": "string"
+            },
+            {
+              "id": "f27af707-515e-41f9-8fba-cf9374270876",
+              "name": "Summary",
+              "value": "={{ $json.output.summary }}",
+              "type": "string"
+            },
+            {
+              "id": "0e37256f-826b-4e5e-ac72-180a61cf4ce8",
+              "name": "Relevancy Score",
+              "value": "={{ $json.output.relevancy_score }}",
+              "type": "string"
+            },
+            {
+              "id": "a23964d1-36c4-4fb6-ab1a-5027bbd61aaa",
+              "name": "Detail Score",
+              "value": "={{ $json.output.detail_score }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        80,
+        -300
+      ],
+      "id": "2c5b86cb-8062-41fa-a4d3-d63246f094a8",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9855d661-58cd-4485-b2d8-3a25b9eb0ff6",
+              "name": "Type",
+              "value": "Question",
+              "type": "string"
+            },
+            {
+              "id": "f27af707-515e-41f9-8fba-cf9374270876",
+              "name": "Summary",
+              "value": "={{ $json.output.summary }}",
+              "type": "string"
+            },
+            {
+              "id": "0e37256f-826b-4e5e-ac72-180a61cf4ce8",
+              "name": "Relevancy Score",
+              "value": "={{ $json.output.relevancy_score }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        80,
+        40
+      ],
+      "id": "d7366255-d5ad-467e-82fd-c75ee5ba7108",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9855d661-58cd-4485-b2d8-3a25b9eb0ff6",
+              "name": "Type",
+              "value": "Request",
+              "type": "string"
+            },
+            {
+              "id": "f27af707-515e-41f9-8fba-cf9374270876",
+              "name": "Summary",
+              "value": "={{ $json.output.summary }}",
+              "type": "string"
+            },
+            {
+              "id": "0e37256f-826b-4e5e-ac72-180a61cf4ce8",
+              "name": "Relevancy Score",
+              "value": "={{ $json.output.relevancy_score }}",
+              "type": "string"
+            },
+            {
+              "id": "a23964d1-36c4-4fb6-ab1a-5027bbd61aaa",
+              "name": "Detail Score",
+              "value": "={{ $json.output.detail_score }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        80,
+        -600
+      ],
+      "id": "4c1292e1-3f63-4f1e-9cc6-c88e14e57607",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "content": "# Fetch Reddit Posts & Find Content Ideas\n\n## How to Set Up\n1. Add your preferred keyword or Sub-reddit in each Reddit node\n2. Add your LLM api-key\n3. Optional: Re-write AI agent prompts to fit your needs\n4. Create an Airtable/Google Sheet to match the columns + add your connection",
+        "height": 660,
+        "width": 620,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1440,
+        -600
+      ],
+      "typeVersion": 1,
+      "id": "f7a9d96a-9497-4209-ae29-3059f7f394db",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "resource": "base",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        560,
+        -300
+      ],
+      "id": "54878ba0-bdea-4d29-8c3f-569144ac0ec2",
+      "name": "Add to Airtable",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "RZA8VKucbKR8T87x",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputText": "={{ $json.selftext }}",
+        "categories": {
+          "categories": [
+            {
+              "category": "Automation Request",
+              "description": "Use this category if the post appears to possibly come from a business owner requesting help with a certain AI or automation process. For context, I am an AI and automation expert, specifically with low-code automated workflow, AI agents, and more."
+            },
+            {
+              "category": "Automation System",
+              "description": "Use this category if the post appears to possibly come from somebody who has built an AI automation system that I could use as an idea for a system that I could create myself. For context, I am an AI and automation expert, specifically with low-code automated workflow, AI agents, and more."
+            },
+            {
+              "category": "Question",
+              "description": "Use this category if the user appears to be asking a general AI and Automation question, not referencing a specific constructible system"
+            }
+          ]
+        },
+        "options": {
+          "fallback": "discard",
+          "systemPromptTemplate": "Please classify the text provided by the reddit user into one of the following categories: {categories}, and use the provided formatting instructions below. Don't explain, and only output the json."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1,
+      "position": [
+        -680,
+        -300
+      ],
+      "id": "d50a05e9-86b7-4d26-b67b-9d8bc479d144",
+      "name": "Request, System, or Question?"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.selftext }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=## Role\nYou are an expert AI and Automation consultant.\n\n## Task\nYour task is to:\n\n1. Analyze the provided reddit post/comment from a user who is requesting an AI automation system to be created.\n2. Summarize the request into a concise, yet comprehensive paragraph detailing the exact system the user wants to be built.\n3. Assign a relevancy score to the system based off its relevancy to my business, skills, and offerings, on a scale from 0.05-0.95.\n4. Assign a detail score to the system based on the amount of detail the user provided. Anything over 0.9 should have enough information to recreate the system in N8N. Anything over 0.7 should have some details regarding the workflow.\n\nFor context, I run an AI Automation agency which builds automated workflows, AI agents, and more, primarily using N8N.\n\nOnly output the summary and the scores. Do not provide an explanation."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        -260,
+        -600
+      ],
+      "id": "db05034a-e171-4856-856b-d27f7d99efda",
+      "name": "Request"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.selftext }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "## Role\nYou are an expert AI and Automation consultant.\n\n## Task\nYour task is to:\n\n1. Analyze the provided reddit post/comment from a user who has displayed their AI automation system.\n2. Summarize the system described into a concise, yet comprehensive paragraph detailing the exact system the user wants to be built.\n3. Assign a relevancy score to the system based off its relevancy to my business, skills, and offerings, on a scale from 0.05-0.95.\n4. Assign a detail score to the system based on the amount of detail the user provided. Anything over 0.9 should have enough information to recreate the system in N8N. Anything over 0.7 should have some details regarding the workflow.\n\nFor context, I run an AI Automation agency which builds automated workflows, AI agents, and more, primarily using N8N.\n\nOnly output the summary and the scores. Do not provide an explanation."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        -260,
+        -300
+      ],
+      "id": "525ac9dd-f9c6-4e8a-af33-dc6769ba9cc4",
+      "name": "System"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.selftext }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "## Role\nYou are an expert AI and Automation consultant.\n\n## Task\nYour task is to:\n\n1. Analyze the provided reddit post/comment from a user who has displayed their AI automation system.\n2. Summarize the question to remove unnecessary filler while keeping all the important aspects of the question.\n3. Assign a score to the question based off its relevancy to my business, skills, and offerings, on a scale from 0.05-0.95.\n\nFor context, I run an AI Automation agency which builds automated workflows, AI agents, and more, primarily using N8N. These questions will be used as content inspiration\n\nOnly output the summary and the score. Do not provide an explanation."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        -260,
+        40
+      ],
+      "id": "3577538b-3b59-4e7d-a8e0-11973fa5f1df",
+      "name": "Question"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -680,
+        -120
+      ],
+      "id": "b55101e6-0253-4c52-a004-4411db35fefa",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "eyGZc6zWUR8CejVj",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -260,
+        -440
+      ],
+      "id": "cf2ba7a2-5be1-41f7-9307-fe1854aac18a",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "eyGZc6zWUR8CejVj",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -260,
+        -140
+      ],
+      "id": "c52e87a1-e45e-4e89-8bc8-ba0171f0eab4",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "eyGZc6zWUR8CejVj",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -260,
+        200
+      ],
+      "id": "04223195-8aad-47b5-810e-9d8775b76e9f",
+      "name": "Google Gemini Chat Model3",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "eyGZc6zWUR8CejVj",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "craw_data",
+          "mode": "list",
+          "cachedResultName": "craw_data"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "summary": "={{ $json.Summary }}",
+            "url": "={{ $json.Type }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "url",
+              "displayName": "url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "summary",
+              "displayName": "summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        560,
+        -100
+      ],
+      "id": "674e61e8-2514-4388-9482-a8ea10b525b4",
+      "name": "Insert rows in a table",
+      "credentials": {
+        "postgres": {
+          "id": "1eLHxjJjm8HeSFoA",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "r/smallbusiness/automation",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "r/smallbusiness/AI Automation",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "r/n8n",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "r/smallbusiness/automation": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "r/smallbusiness/AI Automation": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "r/n8n": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Request, System, or Question?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Request",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "System",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Add to Airtable",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Insert rows in a table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser2": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Question",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Request, System, or Question?": {
+      "main": [
+        [
+          {
+            "node": "Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "System",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Question",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "System": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Question": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Request, System, or Question?",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Request",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "System",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Question",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e771ce41-3862-405c-80c6-9637245fd072",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d270b5303d9d4d3a6d69373cf5b5bf365ddb2843f66b117c5e630423daeca037"
+  },
+  "id": "tYLEcTFRu1k9OivH",
+  "tags": []
+}
